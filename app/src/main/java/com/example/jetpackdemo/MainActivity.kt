@@ -11,7 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.jetpackdemo.presentation.screens.HomeScreen
+import com.example.jetpackdemo.presentation.screens.PostScreen
+import com.example.jetpackdemo.presentation.screens.PostViewModel
 import com.example.jetpackdemo.presentation.theme.JetpackDemoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,12 +24,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val viewModel = hiltViewModel<PostViewModel>()
             JetpackDemoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen(
+                    PostScreen(
+                        modifier = Modifier,
+                        innerPadding = innerPadding,
+                        viewModel = viewModel
+                    )
+                    /*HomeScreen(
                         modifier = Modifier,
                         innerPadding = innerPadding
-                    )
+                    )*/
                 }
             }
         }

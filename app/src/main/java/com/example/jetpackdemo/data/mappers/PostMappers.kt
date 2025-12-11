@@ -4,7 +4,7 @@ import com.example.jetpackdemo.data.local.entity.PostEntity
 import com.example.jetpackdemo.data.remote.dto.PostDto
 import com.example.jetpackdemo.domain.model.Post
 
-// --- mappers ---
+// --- mappers DTO -> Entity ---
 fun PostDto.toEntity() = PostEntity(
     id = id,
     userId = userId,
@@ -13,7 +13,7 @@ fun PostDto.toEntity() = PostEntity(
 )
 
 
-// --- mappers ---
+// --- mappers Entity -> Domain ---
 fun PostEntity.toDomain() = Post(
     id = id,
     userId = userId,
