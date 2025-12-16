@@ -14,11 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.jetpackdemo.R
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,14 +36,15 @@ fun PostScreen(
 ) {
 
     val state = viewModel.state.collectAsState().value
+    val doggyState = viewModel.doggyState.collectAsState().value
 
     PullToRefreshBox(
-        isRefreshing = state.isLoading,
+        isRefreshing = state.isLoading && doggyState.isLoading,
         onRefresh = { viewModel.refresh() },
         modifier = Modifier.padding(innerPadding)
     ) {
 
-        if (state.isLoading && state.posts.isEmpty()) {
+        if (state.isLoading && state.posts.isEmpty() && doggyState.isLoading && doggyState.doggy.isEmpty()) {
             CircularProgressIndicator()
             return@PullToRefreshBox
         }
@@ -45,7 +52,7 @@ fun PostScreen(
         LazyColumn(
             modifier = modifier.padding(16.dp)
         ) {
-            items(state.posts.size) { index ->
+            items(state.posts.size + doggyState.doggy.size) { index ->
                 Text(
                     state.posts[index]?.title?.uppercase(Locale.getDefault()) ?: "",
                     fontSize = 20.sp,
@@ -63,6 +70,18 @@ fun PostScreen(
                 Spacer(Modifier.height(12.dp))
                 HorizontalDivider()
                 Spacer(Modifier.height(12.dp))
+
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(doggyState.doggy[index]?.status)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "Post image",
+                    modifier = Modifier.height(200.dp),
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.ic_launcher_foreground),
+                    error = painterResource(R.drawable.ic_launcher_foreground)
+                )
             }
         }
     }
