@@ -11,6 +11,7 @@ fun DoggyDto.toEntity() = DoggyEntity(
 )
 
 fun DoggyEntity.toDomain() = Doggy(
+    id = id,
     message = message,
     status = status
 )

@@ -14,7 +14,6 @@ hilt = "2.51.1"
 ksp = "2.0.21-1.0.26"
 hiltNavigation = "1.2.0"
 
-
 #retrofit
 retrofit = "2.9.0"
 retrofitConverterGson = "2.9.0"
@@ -22,6 +21,11 @@ retrofitConverterGson = "2.9.0"
 #room
 room = "2.6.0"
 roomCompiler = "2.6.0"
+roomKtx = "2.6.0"
+
+#coil
+coil = "2.4.0"
+ui = "1.10.0"
 
 
 
@@ -53,7 +57,12 @@ retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-
 #room
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
+#coil
+coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 
 
 

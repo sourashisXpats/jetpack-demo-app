@@ -8,12 +8,14 @@ import com.example.jetpackdemo.domain.util.Resource
 import com.example.jetpackdemo.presentation.state.DoggyStates
 import com.example.jetpackdemo.presentation.state.PostStates
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.collections.emptyList
 
 @HiltViewModel
 class PostViewModel @Inject constructor(
@@ -24,7 +26,8 @@ class PostViewModel @Inject constructor(
     // UI State Holder
     private val _state = MutableStateFlow(PostStates())
     private val _doggyState = MutableStateFlow(DoggyStates())
-
+    private val _toastEvent = MutableSharedFlow<String>()
+    val toastEvent = _toastEvent.asSharedFlow()
     val state = _state.asStateFlow()
     val doggyState = _doggyState.asStateFlow()
 
@@ -36,19 +39,31 @@ class PostViewModel @Inject constructor(
 
     fun loadPosts() {
         getPostsUseCase().onEach { res ->
-            _state.value = when (res) {
-                is Resource.Loading -> PostStates(
-                    isLoading = true,
-                    posts = res.data ?: emptyList()
-                )
+            when (res) {
+                is Resource.Loading -> {
+                    _state.value = PostStates(
+                        isLoading = true,
+                        posts = res.data ?: emptyList()
+                    )
+                }
 
-                is Resource.Success -> PostStates(
-                    posts = res.data ?: emptyList()
-                )
+                is Resource.Success -> {
+                    _state.value = PostStates(
+                        posts = res.data ?: emptyList()
+                    )
+                    viewModelScope.launch {
+                        _toastEvent.emit(res.message ?: "Data fetched successfully!")
+                    }
+                }
 
-                is Resource.Error -> PostStates(
-                    error = res.message
-                )
+                is Resource.Error -> {
+                    _state.value = PostStates(
+                        error = res.message
+                    )
+                    viewModelScope.launch {
+                        _toastEvent.emit(res.message ?: "Network error!")
+                    }
+                }
             }
         }.launchIn(viewModelScope)
     }
@@ -58,11 +73,11 @@ class PostViewModel @Inject constructor(
             _doggyState.value = when (res) {
                 is Resource.Loading -> DoggyStates(
                     isLoading = true,
-                    doggy = res.data ?: emptyList()
+                    doggy = res.data
                 )
 
                 is Resource.Success -> DoggyStates(
-                    doggy = res.data ?: emptyList()
+                    doggy = res.data
                 )
 
                 is Resource.Error -> DoggyStates(
@@ -77,4 +92,3 @@ class PostViewModel @Inject constructor(
         loadDoggies()
     }
 }
-

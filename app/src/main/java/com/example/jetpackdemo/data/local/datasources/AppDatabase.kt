@@ -9,7 +9,7 @@ import com.example.jetpackdemo.data.local.entity.PostEntity
 
 @Database(
     entities = [PostEntity::class, DoggyEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

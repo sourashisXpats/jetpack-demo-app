@@ -11,8 +11,12 @@ import kotlinx.coroutines.flow.Flow
 interface DoggyDao {
 
     @Query("SELECT * FROM doggy")
-    fun getDoggies(): Flow<List<DoggyEntity>>
+    fun getDoggies(): Flow<DoggyEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDoggies(doggies: List<DoggyEntity>)
+    suspend fun insertDoggies(doggies: DoggyEntity)
+
+    @Query("DELETE FROM doggy")
+    suspend fun clearDoggies()
+
 }

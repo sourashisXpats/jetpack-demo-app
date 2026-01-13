@@ -41,6 +41,7 @@ class PostRepositoryImpl @Inject constructor(
 
         } catch (e: Exception) {
             emit(Resource.Error("Network error: ${e.message}"))
+            return@flow
         }
 
         // --- emit updated data ---

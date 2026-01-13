@@ -5,5 +5,5 @@ import com.example.jetpackdemo.domain.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface DoggyRepository {
-    fun getRandomDog(): Flow<Resource<List<Doggy?>>>
+    fun getRandomDog(): Flow<Resource<Doggy>>
 }

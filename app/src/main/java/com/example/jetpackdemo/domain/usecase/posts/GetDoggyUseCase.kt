@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetDoggyUseCase @Inject constructor(
     private val repository: DoggyRepository
 ) {
-    operator fun invoke() : Flow<Resource<List<Doggy?>>> {
+    operator fun invoke() : Flow<Resource<Doggy>> {
         return repository.getRandomDog()
     }
 }

@@ -4,6 +4,6 @@ import com.example.jetpackdemo.domain.model.Doggy
 
 data class DoggyStates(
     val isLoading: Boolean = false,
-    val doggy: List<Doggy?> = emptyList(),
+    val doggy: Doggy? = null,
     val error: String? = null
 )
